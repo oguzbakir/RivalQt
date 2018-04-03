@@ -14,6 +14,7 @@ find_package(Qt5Sql REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 
+
 qt5_wrap_ui(ui_mainwindow.h mainwindow.ui)
 
 add_executable(RivalQt main.cpp mainwindow.cpp mainwindow.h)
