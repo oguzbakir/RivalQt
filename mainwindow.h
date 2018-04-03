@@ -24,13 +24,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
 
+private slots:
+    void on_btnApply_clicked();
 
 private:
     QString runCommand(QString cmd);
 
-
+    void applySettings();
     QStringList deviceIds;
     QStringList deviceValues;
     Ui::MainWindow *ui;
