@@ -35,6 +35,7 @@ private:
     QStringList deviceIds;
     QStringList deviceValues;
     Ui::MainWindow *ui;
+    QString device;
 };
 
 #endif // MAINWINDOW_H

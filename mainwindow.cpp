@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QString device;
+
 
     QStringList allDeviceIds = runCommand("xinput --list --id-only").split("\n");
     foreach( QString id, allDeviceIds)
@@ -120,9 +120,34 @@ void MainWindow::applySettings()
 void MainWindow::on_btnApply_clicked()
 {
 
+
+    std::string sens100[] = RIVAL100SENS;
+    std::string sens110[] = RIVAL110SENS;
+    std::string sens300[] = RIVAL300SENS;
+    std::string sens310[] = RIVAL310SENS;
+    std::string pollingRate[] = POLLINGRATES;
+
+    std::string rivalcfg = "rivalcfg";
+    std::string s1 = "-s";
+    std::string s2 = "-S";
+    std::string polling = "-p";
+    std::string command;
+    if (device.contains("100"))
+        command = rivalcfg + " " + s1 + " " + sens100[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens100[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+    else if (device.contains("110"))
+        command = rivalcfg + " " + s1 + " " + sens110[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens110[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+    else if (device.contains("300"))
+        command = rivalcfg + " " + s1 + " " + sens300[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens300[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+    else if (device.contains("310"))
+        command = rivalcfg + " " + s1 + " " + sens310[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens310[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+    printf(command.c_str());
+    system(command.c_str());
+
     applySettings();
 
     ui->statusBar->showMessage("Settings applied.", 1500);
+
+
 }
 
 QString MainWindow::runCommand(QString cmd)
