@@ -50,6 +50,14 @@
 
 #define POLLINGRATES { "125", "250", "500", "1000" }
 
+#define BTN6_ACTION { "os", "default" }
+
+#define LOGO_LIGHT_EFFECTS { "breathfast", "breathmed", "breathslow", "steady", "1", "2", "3", "4" }
+
+#define WHEEL_LIGHT_EFFECTS { "breathfast", "breathmed", "breathslow", "steady", "1", "2", "3", "4" }
+
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -90,12 +98,18 @@ MainWindow::MainWindow(QWidget *parent) :
     } else if (device.contains("300")) {
         ui->sens1Combo->addItems(RIVAL300SENS);
         ui->sens2Combo->addItems(RIVAL300SENS);
+        ui->logoLightEffectCombo->addItems(LOGO_LIGHT_EFFECTS);
+        ui->wheelLightEffectCombo->addItems(WHEEL_LIGHT_EFFECTS);
     } else if (device.contains("310")) {
         ui->sens1Combo->addItems(RIVAL310SENS);
         ui->sens2Combo->addItems(RIVAL310SENS);
+        ui->logoLightEffectCombo->addItems(LOGO_LIGHT_EFFECTS);
+        ui->wheelLightEffectCombo->addItems(WHEEL_LIGHT_EFFECTS);
     } else {
         printf("Device not found");
     }
+
+    ui->button6Combo->addItems(BTN6_ACTION);
 
     ui->pollingRateCombo->addItems(POLLINGRATES);
 
@@ -111,11 +125,6 @@ MainWindow::~MainWindow()
 
 
 
-void MainWindow::applySettings()
-{
-
-
-}
 
 void MainWindow::on_btnApply_clicked()
 {
@@ -126,27 +135,61 @@ void MainWindow::on_btnApply_clicked()
     std::string sens300[] = RIVAL300SENS;
     std::string sens310[] = RIVAL310SENS;
     std::string pollingRate[] = POLLINGRATES;
+    std::string logoLightEffects[] = LOGO_LIGHT_EFFECTS;
+    std::string wheelLightEffects[] = WHEEL_LIGHT_EFFECTS;
 
     std::string rivalcfg = "rivalcfg";
-    std::string s1 = "-s";
-    std::string s2 = "-S";
+    std::string sens1 = "-s";
+    std::string sens2 = "-S";
     std::string polling = "-p";
+    std::string colorComm = "-c";
+    std::string wheelColorComm = "-C";
+    std::string logoLightEffectComm = "-e";
+    std::string wheelLightEffectComm = "-E";
+
+    std::string color = (ui->colorTextEdit->toPlainText().toStdString() == "") ? "red"  : ui->colorTextEdit->toPlainText().split("\n")[0].toStdString();
+    std::string wheelColor = (ui->wColorTextEdit->toPlainText().toStdString() == "") ? "red"  : ui->colorTextEdit->toPlainText().split("\n")[0].toStdString();
+    std::string logoLightEffect = logoLightEffects[ui->logoLightEffectCombo->currentIndex()];
+    std::string wheelLightEffect = wheelLightEffects[ui->wheelLightEffectCombo->currentIndex()];
     std::string command;
     if (device.contains("100"))
-        command = rivalcfg + " " + s1 + " " + sens100[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens100[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+        command = rivalcfg + " " + sens1 + " " + sens100[ui->sens1Combo->currentIndex()] +
+                  " " + sens2 + " " + sens100[ui->sens2Combo->currentIndex()] +
+                  " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()] +
+                  " " + colorComm + " " + color;
     else if (device.contains("110"))
-        command = rivalcfg + " " + s1 + " " + sens110[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens110[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+        command = rivalcfg + " " + sens1 + " " + sens110[ui->sens1Combo->currentIndex()] +
+                  " " + sens2 + " " + sens110[ui->sens2Combo->currentIndex()] +
+                  " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()] +
+                  " " + colorComm + " " + color;
     else if (device.contains("300"))
-        command = rivalcfg + " " + s1 + " " + sens300[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens300[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+        command = rivalcfg + " " + sens1 + " " + sens300[ui->sens1Combo->currentIndex()] + " " + sens2 + " " +
+                  sens300[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()] +
+                  " " + colorComm + " " + color +
+                  " " + wheelColorComm + " " + wheelColor +
+                  " " + logoLightEffectComm + " " + logoLightEffect +
+                  " " + wheelLightEffectComm + " " + wheelLightEffect;
     else if (device.contains("310"))
-        command = rivalcfg + " " + s1 + " " + sens310[ui->sens1Combo->currentIndex()] + " " + s2 + " " + sens310[ui->sens2Combo->currentIndex()] + " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
-    printf(command.c_str());
+        command = rivalcfg + " " + sens1 + " " + sens310[ui->sens1Combo->currentIndex()] +
+                  " " + sens2 + " " + sens310[ui->sens2Combo->currentIndex()] +
+                  " " + polling + " " + pollingRate[ui->pollingRateCombo->currentIndex()];
+
+
+
     system(command.c_str());
 
-    applySettings();
+
 
     ui->statusBar->showMessage("Settings applied.", 1500);
 
+
+}
+
+void MainWindow::on_resetButton_clicked() {
+
+    system("rivalcfg -r");
+
+    ui->statusBar->showMessage("Settings reset.", 1500);
 
 }
 

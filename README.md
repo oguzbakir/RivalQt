@@ -31,7 +31,7 @@ Installation require a compilation toolchain, Qt5 and rivalcfg to compile
 (as root):
 
 
-### Installing g++
+### Installing build tools
 
 Run the following command (as root):
 

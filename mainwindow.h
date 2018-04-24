@@ -27,6 +27,7 @@ public:
 
 private slots:
     void on_btnApply_clicked();
+    void on_resetButton_clicked();
 
 private:
     QString runCommand(QString cmd);
