@@ -51,6 +51,10 @@ Run the following command (as root):
 
     pip install rivalcfg
 
+### Screenshots
+
+![screenshot](./img/program.png)
+
 
 
 
